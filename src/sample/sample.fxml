@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.media.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -13,4 +14,15 @@
    <center>
       <MediaView fitHeight="200.0" fitWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
+   <bottom>
+      <HBox prefHeight="27.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" text="Button" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

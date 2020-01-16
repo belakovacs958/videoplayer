@@ -10,4 +10,7 @@ public class Controller {
     @FXML
     private Button play_btn, pause_btn, stop_btn;
 
+
+
 }
+

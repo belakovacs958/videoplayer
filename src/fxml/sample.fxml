@@ -16,9 +16,9 @@
     <bottom>
         <HBox prefHeight="27.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="play_btn" mnemonicParsing="false" text="Play" />
-                <Button fx:id="pause_btn" mnemonicParsing="false" text="pause" />
-                <Button fx:id="stop_btn" mnemonicParsing="false" text="stop" />
+                <Button fx:id="play_btn" mnemonicParsing="false" onAction="#play" text="Play" />
+                <Button fx:id="pause_btn" mnemonicParsing="false" onAction="#pause" text="pause" />
+                <Button fx:id="stop_btn" mnemonicParsing="false" onAction="#stop" text="stop" />
                 <Button mnemonicParsing="false" text="Button" />
                 <Button mnemonicParsing="false" text="Button" />
             </children>

@@ -25,12 +25,18 @@ public class Controller implements Initializable {
     private ListView<String> menuList = new ListView<String>();
 
     @FXML
-    private ListView<String> playlist = new ListView<String>();
+    private ListView<String> playlistList = new ListView<String>();
+
+    @FXML
+    private ListView<String> clipsInPlaylist = new ListView<String>();
+
 
 
     private MediaPlayer mp;
     private Media me;
     ObservableList<String> videoLocations = FXCollections.observableArrayList();
+    ObservableList<String> playlistNames = FXCollections.observableArrayList();
+    ObservableList<String> clipNamesFromPlaylist = FXCollections.observableArrayList();
 
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
@@ -57,6 +63,77 @@ public class Controller implements Initializable {
         menuList.setItems(videoLocations);
 
         menuList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                GetFileLocation(newValue);
+            }
+        });
+        String playlistData = "";
+        int playlistCounter = 1;
+        while (!playlistData.equals("|ND|")) {
+            DB.selectSQL("select fldPlaylistName from tblPlaylists where fldPlaylistID=" + playlistCounter + ";");
+            playlistData = DB.getData();
+            System.out.println(data);
+
+            if (!playlistData.equals("|ND|")) {
+                //System.out.println(playlistData);
+               playlistNames.add(playlistData);
+            }
+            playlistCounter++;
+        }
+        playlistList.setItems(playlistNames);
+
+        playlistList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                //GetFileLocation(newValue);
+                displayClipNamesFromPlaylist();
+            }
+        });
+
+    }
+
+    private void displayClipNamesFromPlaylist(){
+        String data = "";
+        int counter = 1;
+        DB.selectSQL("SELECT \n" +
+                "    fldTitle\n" +
+                "FROM\n" +
+                "    tblClips\n" +
+                "WHERE\n" +
+                "    fldClipID IN (SELECT \n" +
+                "            fldClipID\n" +
+                "        FROM\n" +
+                "            tblIDs\n" +
+                "        WHERE\n" +
+                "            fldPlaylistID =1);");
+
+        while (!data.equals("|ND|")) {
+           /* DB.selectSQL("SELECT \n" +
+                    "    fldTitle\n" +
+                    "FROM\n" +
+                    "    tblClips\n" +
+                    "WHERE\n" +
+                    "    fldClipID IN (SELECT \n" +
+                    "            fldClipID\n" +
+                    "        FROM\n" +
+                    "            tblIDs\n" +
+                    "        WHERE\n" +
+                    "            fldPlaylistID =1);");
+
+            */
+            data = DB.getData();
+            //System.out.println(data);
+
+            if (!data.equals("|ND|")) {
+                System.out.println(data);
+                clipNamesFromPlaylist.add(data);
+            }
+            counter++;
+        }
+        clipsInPlaylist.setItems(clipNamesFromPlaylist);
+
+        clipsInPlaylist.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 GetFileLocation(newValue);

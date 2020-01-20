@@ -1,15 +1,11 @@
 package sample;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
-/**
- *
- * @author tha
- */
+
 public class DB {
     private static Connection con;
     private static PreparedStatement ps;
@@ -23,9 +19,7 @@ public class DB {
     private static int numberOfColumns;
     private static int currentColumnNumber=1;
 
-    /**
-     * STATES
-     */
+
     private static boolean moreData=false;  // from Resultset
     private static boolean pendingData=false; // from select statement
     private static boolean terminated = false;

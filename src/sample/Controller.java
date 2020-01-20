@@ -6,7 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.media.*;
-import javafx.scene.control.Button;
+
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,8 +18,6 @@ public class Controller implements Initializable {
     @FXML
     private MediaView mediaV;
 
-    @FXML
-    private Button play;
 
     @FXML
     private ListView<String> menuList = new ListView<String>();
@@ -39,20 +37,20 @@ public class Controller implements Initializable {
     ObservableList<String> clipNamesFromPlaylist = FXCollections.observableArrayList();
 
     /**
-     * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
+     *
      *
      * @param location
      * @param resources
+     *
      */
     public void initialize(URL location, ResourceBundle resources){
-        // Build the path to the location of the media file!
-
+        //this part of initialize method displayes all the clips in a list
         String data = "";
         int counter = 1;
         while (!data.equals("|ND|")) {
             DB.selectSQL("SELECT fldTitle FROM tblClips WHERE fldClipID=" + counter + ";");
             data = DB.getData();
-            //System.out.println(data);
+
 
             if (!data.equals("|ND|")) {
                 System.out.println(data);
@@ -68,6 +66,7 @@ public class Controller implements Initializable {
                 GetFileLocation(newValue);
             }
         });
+        //this part of initialize displayes all the playlists in a list
         String playlistData = "";
         int playlistCounter = 1;
         while (!playlistData.equals("|ND|")) {
@@ -76,7 +75,7 @@ public class Controller implements Initializable {
             System.out.println(data);
 
             if (!playlistData.equals("|ND|")) {
-                //System.out.println(playlistData);
+
                playlistNames.add(playlistData);
             }
             playlistCounter++;
@@ -86,13 +85,17 @@ public class Controller implements Initializable {
         playlistList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                //GetFileLocation(newValue);
+
                 displayClipNamesFromPlaylist();
             }
         });
 
     }
 
+    /**
+     *  here is the program select the clips from the playlist
+     */
+    //this method displayes the clip names in a list from the chosen playlist
     private void displayClipNamesFromPlaylist(){
         String data = "";
         int counter = 1;
@@ -109,21 +112,9 @@ public class Controller implements Initializable {
                 "            fldPlaylistID =1);");
 
         while (!data.equals("|ND|")) {
-           /* DB.selectSQL("SELECT \n" +
-                    "    fldTitle\n" +
-                    "FROM\n" +
-                    "    tblClips\n" +
-                    "WHERE\n" +
-                    "    fldClipID IN (SELECT \n" +
-                    "            fldClipID\n" +
-                    "        FROM\n" +
-                    "            tblIDs\n" +
-                    "        WHERE\n" +
-                    "            fldPlaylistID =1);");
 
-            */
             data = DB.getData();
-            //System.out.println(data);
+
 
             if (!data.equals("|ND|")) {
                 System.out.println(data);
@@ -134,6 +125,7 @@ public class Controller implements Initializable {
         clipsInPlaylist.setItems(clipNamesFromPlaylist);
 
         clipsInPlaylist.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 GetFileLocation(newValue);
@@ -142,6 +134,11 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     *
+     * @param title
+     */
+    // this method retrieves the file location from the database
     private void GetFileLocation(String title) {
         DB.selectSQL("select fldStorage from tblClips Where fldTitle='" + title + "';");
         String filePath = DB.getData();
@@ -149,17 +146,21 @@ public class Controller implements Initializable {
         LoadUpVideo(filePath);
     }
 
+    /**
+     *
+     * @param filepath
+     */
+    //this method loads and displayes the media content
     private void LoadUpVideo(String filepath){
         String path = new File(filepath).getAbsolutePath();
 
-        // Create new Media object (the actual media content)
+
         me = new Media(new File(path).toURI().toString());
-        // Create new MediaPlayer and attach the media to be played
+
         mp = new MediaPlayer(me);
-        //
+
         mediaV.setMediaPlayer(mp);
-        // mp.setAutoPlay(true);
-        // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
+
         mp.setAutoPlay(false);
     }
 
@@ -169,12 +170,12 @@ public class Controller implements Initializable {
      */
     private void handlePlay()
     {
-        // Play the mediaPlayer with the attached media
+
         mp.play();
     }
     @FXML
     /**
-     * Handler for pause
+     * Handler for pause button
      */
     private void handlePause()
     {
@@ -182,7 +183,7 @@ public class Controller implements Initializable {
     }
     @FXML
     /**
-     * Handler for pause
+     * Handler for stop button
      */
     private void handleStop()
     {

@@ -86,19 +86,28 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-                displayClipNamesFromPlaylist();
+                displayClipNamesFromPlaylist(newValue);
             }
         });
 
+    }
+
+    private String GetPlaylistID(String playlistName) {
+        DB.selectSQL("SELECT fldPlaylistID FROM tblPlaylists WHERE fldPlaylistName='" + playlistName + "';");
+        return DB.getData();
     }
 
     /**
      *  here is the program select the clips from the playlist
      */
     //this method displayes the clip names in a list from the chosen playlist
-    private void displayClipNamesFromPlaylist(){
+    private void displayClipNamesFromPlaylist(String playlistName){
+        clipNamesFromPlaylist.clear();
         String data = "";
         int counter = 1;
+
+
+        String playlistID = GetPlaylistID(playlistName);
         DB.selectSQL("SELECT \n" +
                 "    fldTitle\n" +
                 "FROM\n" +
@@ -109,7 +118,7 @@ public class Controller implements Initializable {
                 "        FROM\n" +
                 "            tblIDs\n" +
                 "        WHERE\n" +
-                "            fldPlaylistID =1);");
+                "            fldPlaylistID =" + playlistID + ");");
 
         while (!data.equals("|ND|")) {
 
@@ -131,7 +140,6 @@ public class Controller implements Initializable {
                 GetFileLocation(newValue);
             }
         });
-
     }
 
     /**
